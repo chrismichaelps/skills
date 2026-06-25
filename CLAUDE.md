@@ -1,94 +1,71 @@
-# CLAUDE.md - Official FMCF v3.5 Operating Guide
+# CLAUDE.md
 
-This project is **strictly governed** by **FMCF v3.5 (Fibonacci Matrix Context Flow)** — a deterministic architectural governance system that turns the AI into a disciplined Matrix Engine.
+Guidance for agents working in this repository.
 
-## The Brain of the Project
+## What this repo is
 
-- **Location**: `/hashes/` (Dual-Track Hash Registry – Track 2)
-- `/hashes/` **is the brain** and the **Single Source of Truth** for architecture, contracts, logic, grammar, seams, and history.
-- **1:1 Mirroring Rule**: The folder structure inside `/hashes/` **MUST exactly mirror** the source code structure (typically `/src/` or `/app/`).  
-  Example: `src/components/payment/` → `hashes/src/components/payment/`
-- **Hash-First Hard Lock**: Never write or modify implementation code (Track 1) before updating the registry in `/hashes/` (Track 2).
+A collection of framework-agnostic agentic **skills** — operational specifications that govern how autonomous agents build software. The flagship skill is **FMCF (Fibonacci Matrix Context Flow)**, a wiki-first architectural governance system.
 
-## I. Mathematical Constitution (Non-Negotiable Laws)
+This repo contains the *specifications themselves* (Markdown), not an application. There is no build, no test suite, no runtime. "Correctness" here means: the skill text is internally consistent, self-contained, and faithful to its stated paradigm.
 
-1. **Second-Order Markov Determinism** — State depends only on the last two states. Aggressively prune older context (phi-Bounded Pruning).
-2. **Hash-First Hard-Lock** — Registry (Track 2) must be updated before any implementation code (Track 1).
-3. **Sequential Integrity (Loopback)** — Every TLI code injection must be immediately followed by registry update.
-4. **Zero-Inference Policy + Universal Understanding Law** — Never guess patterns. Anchor to Grammar Shards. Request "Senior Definition" if missing.
-5. **Cache Trust Protocol** — At session start: sample ≥3 files from `/hashes/`, re-compute hashes. Declare `STALE_CACHE` + full re-scan if mismatch.
-6. **Dynamic Portability Lock** — Always use `@root/` prefix for paths. No absolute or fragile relative paths.
-7. **Specialist-Silo Constraint** — Operate strictly within one role and declare transitions.
+## Layout
 
-## Specialist Silo Roles
+```
+README.md              ← public-facing overview of the repo and FMCF
+CLAUDE.md              ← this file
+skills/
+  fmcf/
+    SKILL.md           ← the FMCF skill (the source of truth — edit this)
+    fmcf.skill         ← a zip of SKILL.md for drop-in install (GENERATED — keep in sync)
+```
 
-| Role                  | Responsibility                                              | Strictly Prohibited                                      |
-|-----------------------|-------------------------------------------------------------|----------------------------------------------------------|
-| **Architect**         | Topology, friction discovery, seam analysis, deepening, Grilling Loop | Writing code or contracts                                |
-| **DNA Engineer**      | Contracts (`.contract.json`), logic blueprints (`.logic.md`) | Writing implementation or editing atlas                  |
-| **Shadow**            | Targeted Line Injection (TLI) – surgical code changes       | Changing contracts, seams, or registry                   |
-| **Forensic Guardian** | Registry updates, `.chronos.json`, integrity & traceability | Proposing architecture or writing code                   |
+## FMCF in one sentence
 
-**Standard Deepening Flow**: `[Architect → DNA Engineer → Shadow → Forensic Guardian]`
+**Build the entire application as an Obsidian-style wiki vault first, then write code as a faithful projection of the wiki.** The wiki — not conversation history, not training data, not hash files — is the deterministic source of truth.
 
-## II. Dual-Track Hash Registry
+Current version: **v4.0 — Wiki-First Matrix** (the header in `SKILL.md` is authoritative).
 
-- **Track 1 (Implementation)**: Surgical TLI only. >15% file change → trigger Shard Split.
-- **Track 2 (Registry / Brain)**: 1:1 mirror of source. Contains Grammar Shards, contracts, logic, atlas, chronos, seams.json, etc.
+### Core invariants the skill encodes
+- **Wiki-First Hard-Lock** — no implementation code for a module until its wiki page exists.
+- **1:1 Mirroring Law** — `wiki/src/` mirrors the app source tree depth-for-depth; one page per source file.
+- **grillme** — the agent resolves every answerable design question itself, to a senior-grade default, and records it. It never bounces answerable questions to the user.
+- **handoff** — role/session continuity is written to `wiki/handoffs/*` pages, never left in conversation memory.
+- **Grammar Law** — no stack-specific syntax without anchoring to the FMCF-specific `grammar/[lang].md` page.
 
-## III. Domain Constitution
+## Working conventions
 
-- `docs/CONTEXT.md` — Business Domain Glossary (canonical nouns).
-- `hashes/LANGUAGE.md` — Architectural Vocabulary (Ousterhout-based: Module, Interface, Implementation, Depth, Deep/Shallow Module, Seam, Locality, Deepening).
+- **Edit `skills/fmcf/SKILL.md` as the single source of truth.** `fmcf.skill` is a generated artifact.
+- **After editing `SKILL.md`, regenerate the zip** so the packaged install matches:
 
-## IV. Phase 1: Measure — Metrics & Seam Model
+  ```bash
+  cd skills/fmcf
+  rm -f fmcf.skill
+  mkdir -p /tmp/fmcf-pkg/fmcf && cp SKILL.md /tmp/fmcf-pkg/fmcf/SKILL.md
+  (cd /tmp/fmcf-pkg && zip -q -r fmcf.skill fmcf)
+  mv /tmp/fmcf-pkg/fmcf.skill ./fmcf.skill && rm -rf /tmp/fmcf-pkg
+  ```
 
-**Core Metrics**:
-- **DEPTH_SCORE** (Primary): `(Leverage + Locality + Testability)/3 - Complexity_Tax` → >0.70 = DEEP, <0.40 = SHALLOW.
-- Coupling Complexity, Interface Stability, Cognitive Load, NFR Depth.
+- **Code fences inside schema examples:** when a schema example (already inside a ```` ```markdown ```` block) needs its own fenced code block, make the **outer** fence four backticks and the inner three, so they don't collide.
+- **No git-commit step inside FMCF.** v4.0 deliberately removed commit enforcement from the workflow — do not reintroduce it into the skill text. (This is about the skill's *content*; committing changes to *this repo* is normal and expected.)
+- **Keep the migration story intact.** `SKILL.md` documents how each v3.5 artifact (`.hash.md`, `.contract.json`, `.logic.md`, `seams.json`, etc.) maps into the v4.0 wiki pages. When changing schemas, preserve that mapping so existing FMCF vaults can migrate mechanically.
 
-**Seam Capacity Model**:
-- **BACKBONE** (9–10): Deepen heavily (2+ prod adapters).
-- **CRITICAL** (5–8): Deepen moderately.
-- **EXPLORATORY** (2–4): Keep simple or collapse.
-- **INTERNAL**: Tight coupling allowed (same subsystem).
+## Self-review before committing skill changes
 
-**Additional Seam Elements**: Lifecycle, Drift Detection (SEAM_DRIFT_SCORE), Chain Analysis, Collapse Protocol, Subsystem Registry (DDD Bounded Contexts).
+There is no automated test. Before committing changes to `SKILL.md`, verify by reading:
+1. **Consistency** — no references to dropped concepts as if they were still live (e.g. hash cache-trust gates, JSON registries, BigInt `State_ID`, a git-commit workflow step).
+2. **Self-containment** — every schema, protocol, and decision rule is defined inline; no external script or file is required to use the skill.
+3. **Paradigm fidelity** — every mechanic ultimately serves "wiki first, then code."
+4. **Zip sync** — `fmcf.skill` was regenerated from the current `SKILL.md`.
 
-## V. Phase 2: Predict
+A quick grep for stale terms after an edit:
 
-- Decision Risk Assessment (DECISION_RISK_SCORE)
-- Refactoring Cost Model
-- Simulation Engine + Empirical Feedback Loop
-- ADD-ADRF: Architecture Decision Record Formation (7 phases)
+```bash
+grep -nE "scaffold\.py|\.atlas|\.chronos|seams\.json|velocity\.json|BigInt|SIG-|git commit -m|Hash-First|STALE_CACHE" skills/fmcf/SKILL.md
+```
 
-## VI. Phase 3: Govern
+Hits should only ever appear as intentional "replaces X" migration notes, never as live mechanics.
 
-- Friction Discovery, Deletion Test, Grilling Loop
-- Architectural Debt classification
-- Architecture Congress, Momentum Vector, Capabilities Audit
-- Velocity Tracking & ROI calculation
+## Git
 
-## Universal Operational Workflow (F Phases)
-
-- **F1**: Cache Trust + Registry Validation
-- **F2**: Maturity Assessment + Grammar & Domain Alignment
-- **F3**: Seam Classification + Friction Scan
-- **F4**: Hash-First Registry Update (DNA Lock)
-- **F5**: Targeted Line Injection (TLI)
-- **F6**: Registry Sync + Integrity Check + Grammar Drift Check
-
-## Additional Elements
-
-- **Power Features**: Contract Diff Engine, Grammar Drift Detector, Seam Test Coverage Gate.
-- **Modes of Operation**: Scaffold, Enforce, Audit, Improve, Ship (vertical slices + gh CLI for issues).
-- **Comments Law**, Dynamic Matrix Convergence, Integrity Anchor.
-
----
-
-**This file is mandatory reading** at the start of every session.
-
-**Primary Reference & Brain**: `/hashes/` — treat it as the central nervous system of the project.
-
-> [!IMPORTANT]
-> For the complete detailed formulas, file schemas, protocols, and examples, always refer to the full FMCF fmcf.md file.
+- Default branch: `main`. A `dev` branch tracks the same content for staging.
+- Commit messages end with the Co-Authored-By trailer when authored with an assistant.
